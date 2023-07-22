@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import SearchBar from "./SearchBar";
+import SearchResult from "./SearchResult";
 
-function App() {
+const App = () => {
+  const suggestions = [
+    "Apple",
+    "Banana",
+    "Cherry",
+    "Date",
+    "Elderberry",
+    "Fig",
+    "Grape",
+  ]; // replace this with your list
+  const [selectedSuggestions, setSelectedSuggestions] = useState([]);
+
+  const handleSuggestionClick = (suggestion) => {
+    setSelectedSuggestions((prevSuggestions) => [
+      ...prevSuggestions,
+      suggestion,
+    ]);
+  };
+
+  const handleDelete = (index) => {
+    setSelectedSuggestions((prevSuggestions) =>
+      prevSuggestions.filter((s, i) => i !== index)
+    );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <SearchBar
+        suggestions={suggestions}
+        maxSuggestions={5}
+        onSuggestionClick={handleSuggestionClick}
+      />
+      <hr />
+      {selectedSuggestions.map((suggestion, i) => (
+        <SearchResult
+          key={i}
+          result={suggestion}
+          onDelete={() => handleDelete(i)}
+        />
+      ))}
     </div>
   );
-}
+};
 
 export default App;
