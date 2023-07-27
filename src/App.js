@@ -1,49 +1,17 @@
-import React, { useState } from "react";
-import SearchBar from "./SearchBar";
-import SearchResult from "./SearchResult";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import Search from "./Search";
 
-const App = () => {
-  const suggestions = [
-    "Apple",
-    "Banana",
-    "Cherry",
-    "Date",
-    "Elderberry",
-    "Fig",
-    "Grape",
-  ]; // replace this with your list
-  const [selectedSuggestions, setSelectedSuggestions] = useState([]);
-
-  const handleSuggestionClick = (suggestion) => {
-    setSelectedSuggestions((prevSuggestions) => [
-      ...prevSuggestions,
-      suggestion,
-    ]);
-  };
-
-  const handleDelete = (index) => {
-    setSelectedSuggestions((prevSuggestions) =>
-      prevSuggestions.filter((s, i) => i !== index)
-    );
-  };
-
+function App() {
   return (
-    <div className="App">
-      <SearchBar
-        suggestions={suggestions}
-        maxSuggestions={5}
-        onSuggestionClick={handleSuggestionClick}
-      />
-      <hr />
-      {selectedSuggestions.map((suggestion, i) => (
-        <SearchResult
-          key={i}
-          result={suggestion}
-          onDelete={() => handleDelete(i)}
-        />
-      ))}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
