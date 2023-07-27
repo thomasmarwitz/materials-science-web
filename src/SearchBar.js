@@ -14,8 +14,9 @@ const SearchInput = styled.input`
   margin: 1rem 0;
   padding: 0 1rem;
   font-size: 1rem;
-  border-radius: 5px;
+  border-radius: 24px;
   border: 1px solid #ddd;
+  outline: none;
 `;
 
 const SuggestionBox = styled.div`
