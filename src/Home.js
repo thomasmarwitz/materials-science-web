@@ -10,13 +10,22 @@ const Container = styled.div`
   justify-content: flex-start;
   height: 60vh;
   padding-top: 30vh; /* adjust to position the search bar on the screen */
+  @media (orientation: portrait) {
+    padding-top: 6vh;
+  }
 `;
 
 const SearchBar = styled.input`
-  width: 50vw;
+  width: 60vw;
+  @media (orientation: portrait) {
+    width: 80vw;
+  }
   height: 50px;
   text-align: center;
-  font-size: 20px;
+  font-size: 1.5rem;
+  @media (orientation: portrait) {
+    font-size: 1rem;
+  }
   margin-bottom: 10px;
   border: none;
   border-radius: 25px;
@@ -29,7 +38,10 @@ const SearchBar = styled.input`
 `;
 
 const Suggestions = styled.div`
-  width: 50vw;
+  width: 60vw;
+  @media (orientation: portrait) {
+    width: 80vw;
+  }
   background-color: #f1f1f1;
   border-radius: 5px;
   box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.2);
@@ -52,7 +64,7 @@ function parseSuggestionList(suggestionList) {
   const lookup = {};
 
   for (let i = 0; i < suggestionList.length; i++) {
-    lookup[suggestionList[i].match] = suggestionList[i].count;
+    lookup[suggestionList[i].concept] = suggestionList[i].count;
   }
 
   return lookup;
@@ -119,7 +131,6 @@ function Home() {
         }
         onFocus={() => setIsFocused(true)}
         onBlur={() => {
-          console.log(typeof query);
           setIsFocused(query !== "");
         }}
       />

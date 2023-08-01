@@ -63,14 +63,14 @@ function Search() {
         <ResultsTable>
           <thead>
             <tr>
-              <Th>Match</Th>
+              <Th>Concept</Th>
               <Th>Distance</Th>
             </tr>
           </thead>
           <tbody>
             {results.map((result, index) => (
               <tr key={index}>
-                <Td>{result.match}</Td>
+                <Td>{result.concept}</Td>
                 <Td style={{ backgroundColor: getBgColor(result.distance) }}>
                   {result.distance}
                 </Td>
