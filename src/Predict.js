@@ -38,7 +38,7 @@ function Predict() {
 
     setIsLoading(true);
     const concepts = query.split(",");
-    Promise.all(concepts.map((concept) => predict(concept, 25, 10)))
+    Promise.all(concepts.map((concept) => predict(concept, 25, 30)))
       .then((results) => {
         setPredictions(results);
         setIsLoading(false);
