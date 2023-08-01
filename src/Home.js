@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { getAllConcepts } from "./services/api/client";
 
 const Container = styled.div`
   display: flex;
@@ -81,8 +81,7 @@ function Home() {
   useEffect(() => {
     console.log("Fetching suggestions");
     // Fetch the initial list of suggestions when the component mounts
-    axios
-      .get("http://localhost:8000/search?query=&semantic=false&k=200000")
+    getAllConcepts()
       .then((response) => {
         const suggestionLookup = parseSuggestionList(response.data);
         setSuggestionLookup(suggestionLookup);

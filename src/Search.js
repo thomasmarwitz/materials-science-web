@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
+import { search } from "./services/api/client";
 
 const Loading = styled.div`
   text-align: center;
@@ -43,8 +43,7 @@ function Search() {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/search?query=${query}&semantic=true&k=30`)
+    search({ query, semantic: true, k: 30 })
       .then((res) => {
         setResults(res.data);
         setLoading(false);
