@@ -13,4 +13,8 @@ function getAllConcepts() {
   return search({ query: "", semantic: false });
 }
 
-export { search, getAllConcepts };
+function predict(concept, max_degree = 50, k = 10) {
+  return api.get(`/predict?concept=${concept}&max_degree=${max_degree}&k=${k}`);
+}
+
+export { search, getAllConcepts, predict };
