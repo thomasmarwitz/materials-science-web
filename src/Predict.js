@@ -33,12 +33,21 @@ function Predict() {
   const [predictions, setPredictions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const maxDegree = localStorage.getItem("maxDegree") || 25;
+  const resultsLengthPredict =
+    localStorage.getItem("resultsLengthPredict") || 20;
+  const minDepth = localStorage.getItem("minDepth") || "";
+
   useEffect(() => {
     console.log("Fetching predictions");
 
     setIsLoading(true);
     const concepts = query.split(",");
-    Promise.all(concepts.map((concept) => predict(concept, 25, 30)))
+    Promise.all(
+      concepts.map((concept) =>
+        predict(concept, maxDegree, resultsLengthPredict, minDepth)
+      )
+    )
       .then((results) => {
         setPredictions(results);
         setIsLoading(false);

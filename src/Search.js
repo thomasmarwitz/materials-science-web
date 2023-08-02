@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { search } from "./services/api/client";
+import { FaCog } from "react-icons/fa";
+import Settings from "./SettingsModal";
+
+const SettingsButton = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+`;
 
 const Loading = styled.div`
   text-align: center;
@@ -65,9 +74,12 @@ function Search() {
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState([]);
   const [selectedConcepts, setSelectedConcepts] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const resultsLengthSearch = localStorage.getItem("resultsLengthSearch") || 10;
 
   useEffect(() => {
-    search({ query, semantic: true, k: 10 })
+    search({ query, semantic: true, k: resultsLengthSearch })
       .then((res) => {
         setResults(res.data);
         setLoading(false);
@@ -76,7 +88,7 @@ function Search() {
         console.error(err);
         setLoading(false);
       });
-  }, [query]);
+  }, [query, resultsLengthSearch]);
 
   const handleCheck = (concept) => {
     setSelectedConcepts((prev) => {
@@ -93,12 +105,24 @@ function Search() {
     navigate(`/predict?concepts=${selectedConcepts.join(",")}`);
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       {loading ? (
         <Loading>Loading...</Loading>
       ) : (
         <>
+          <SettingsButton onClick={openModal}>
+            <FaCog size={24} />
+          </SettingsButton>
+          <Settings isOpen={isModalOpen} closeModal={closeModal} />
           <ResultsTable>
             <thead>
               <tr>
@@ -126,7 +150,10 @@ function Search() {
             </tbody>
           </ResultsTable>
           <ButtonContainer>
-            <CalculateButton onClick={handleCalculateScores}>
+            <CalculateButton
+              onClick={handleCalculateScores}
+              disabled={selectedConcepts.length === 0}
+            >
               Calculate Scores
             </CalculateButton>
           </ButtonContainer>

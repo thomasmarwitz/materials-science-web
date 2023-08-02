@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { getAllConcepts } from "./services/api/client";
+import { FaCog } from "react-icons/fa";
+import Settings from "./SettingsModal";
+
+const SettingsButton = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -76,7 +85,10 @@ function Home() {
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionLookup, setSuggestionLookup] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
-  // Assuming this is your list of suggestions
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const suggestionLength = localStorage.getItem("suggestionLength") || 5;
 
   useEffect(() => {
     console.log("Fetching suggestions");
@@ -100,13 +112,14 @@ function Home() {
         return suggestionLookup[b] - suggestionLookup[a];
       });
 
-      setSuggestions(filteredSuggestions.slice(0, 5));
+      setSuggestions(filteredSuggestions.slice(0, suggestionLength));
     } else {
       setSuggestions([]);
     }
-  }, [query, suggestionLookup]);
+  }, [query, suggestionLookup, suggestionLength]);
 
   const onSearch = (e) => {
+    setShowSuggestions(true);
     if (e.key === "Enter") {
       navigate(`/search?query=${query}`);
     }
@@ -118,8 +131,21 @@ function Home() {
     navigate(`/search?query=${suggestion}`);
   };
 
+  const openModal = () => {
+    setShowSuggestions(false);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <Container>
+      <SettingsButton onClick={openModal}>
+        <FaCog size={24} />
+      </SettingsButton>
+      <Settings isOpen={isModalOpen} closeModal={closeModal} />
       <SearchBar
         type="text"
         value={query}
@@ -133,7 +159,7 @@ function Home() {
           setIsFocused(query !== "");
         }}
       />
-      {suggestions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && (
         <Suggestions>
           {suggestions.map((suggestion, index) => (
             <SuggestionItem
