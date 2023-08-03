@@ -86,7 +86,7 @@ function Home() {
   const [suggestionLookup, setSuggestionLookup] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   const suggestionLength = localStorage.getItem("suggestionLength") || 5;
 
@@ -137,6 +137,7 @@ function Home() {
   };
 
   const closeModal = () => {
+    setShowSuggestions(true);
     setIsModalOpen(false);
   };
 
