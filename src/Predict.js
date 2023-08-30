@@ -2,19 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { predict } from "./services/api/client"; // Import the predict function
 import styled from "styled-components";
+import CombinationModal from "./CombinationModal";
+import { Summary, Details } from "./styles/CustomComponents";
 
 const Loading = styled.div`
   text-align: center;
   margin-top: 50px;
   font-size: 2rem;
   font-family: sans-serif;
-`;
-
-const Summary = styled.summary`
-  font-size: 1.5rem;
-  cursor: pointer;
-  font-family: sans-serif;
-  font-weight: bold;
 `;
 
 const Th = styled.th`
@@ -58,6 +53,10 @@ function Predict() {
       });
   }, [query]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [conceptA, setConceptA] = useState("");
+  const [conceptB, setConceptB] = useState("");
+
   if (isLoading) {
     return <Loading>Loading...</Loading>;
   }
@@ -70,16 +69,29 @@ function Predict() {
     data: predictions[index].data,
   }));
 
+  const combine = (concept_a, concept_b) => {
+    setIsModalOpen(true);
+    setConceptA(concept_a);
+    setConceptB(concept_b);
+  };
+
   return (
     <div>
+      <CombinationModal
+        isOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        conceptA={conceptA}
+        conceptB={conceptB}
+      />
       {c_and_p.map((el, index) => (
-        <details key={index}>
+        <Details key={index}>
           <Summary>{el.concept}</Summary>
           <table>
             <thead>
               <tr>
                 <Th>Concept</Th>
                 <Th>Score</Th>
+                <Th>Feature</Th>
               </tr>
             </thead>
             <tbody>
@@ -87,11 +99,16 @@ function Predict() {
                 <tr key={i}>
                   <Td>{item.concept}</Td>
                   <Td>{item.score.toFixed(4)}</Td>
+                  <Td>
+                    <button onClick={() => combine(item.concept, el.concept)}>
+                      Combine
+                    </button>
+                  </Td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </details>
+        </Details>
       ))}
     </div>
   );

@@ -20,7 +20,19 @@ function predict(concept, max_degree = 50, k = 10, minDepth = "") {
     request += `&min_depth=${minDepth}`;
   }
 
-  return api.get(request);
+  return api.cached_get(request);
 }
 
-export { search, getAllConcepts, predict };
+function generateAbstracts(
+  conceptA,
+  conceptB,
+  k = 3,
+  minWords = 100,
+  maxWords = 150
+) {
+  return api.cached_get(
+    `/generate_abstracts?concept_a=${conceptA}&concept_b=${conceptB}&k=${k}&min_words=${minWords}&max_words=${maxWords}`
+  );
+}
+
+export { search, getAllConcepts, predict, generateAbstracts };
